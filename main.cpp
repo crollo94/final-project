@@ -14,7 +14,7 @@ const string loottable[] =
     "magic scroll",
     "dagger",
     "shield",
-    "torch"  // working on this one
+    "torch"
 };
 
 const int lootcount = sizeof(loottable) / sizeof(loottable[0]);
@@ -22,7 +22,7 @@ const int lootcount = sizeof(loottable) / sizeof(loottable[0]);
 // Function for entering a room
 void enterroom(player& p)
 {
-    int outcome = rand() % 5;  // Increased random possibilities to include more room types
+    int outcome = rand() % 6;  // Now supports 6 types of rooms
 
     if (outcome == 0)  // Monster room
     {
@@ -98,7 +98,7 @@ void enterroom(player& p)
     else if (outcome == 3)  // Trap room
     {
         cout << "You triggered a trap!" << endl;
-        p.takeTrapDamage();
+        p.taketrapdamage();
     }
     else if (outcome == 4)  // Puzzle room
     {
@@ -109,27 +109,29 @@ void enterroom(player& p)
             cout << "You couldn't solve the puzzle and are hurt by the magical trap!" << endl;
         }
     }
-    else if(outcome == 5)
+    else if (outcome == 5)  // Dark room that needs torch
     {
-        cout << "you enter a dark room" << endl;
-        bool hastorch = false;  //checking for the torch
+        cout << "You enter a dark room..." << endl;
+        bool hastorch = false;
+
         for (int i = 0; i < p.getItemCount(); ++i)
         {
-            if (p.getinventoryitem(i)== "torch")
+            if (p.getInventoryItem(i) == "torch")
             {
                 hastorch = true;
                 break;
             }
         }
+
         if (hastorch)
         {
-            cout << "you use your touch to light up the way" <<endl;
+            cout << "You use your torch to light up the room and find a gold coin!" << endl;
             p.additem("gold coin");
         }
         else
         {
-            cout << "its too dark to see, you fall over and get hurt" << endl;
-            p.taketrapdamge(); 
+            cout << "It's too dark to see! You stumble and get hurt." << endl;
+            p.taketrapdamage();
         }
     }
 }
@@ -192,24 +194,25 @@ void bossBattle(player& p)
 
 int main()
 {
-    srand(time(0));
+    srand(static_cast<unsigned int>(time(0)));
+
     player p;
     cout << "Welcome to the dungeon!" << endl;
     p.createplayer();
     p.stats();
 
-    bool enteredBossRoom = false;  // Flag to check if boss room has been reached
+    bool enteredBossRoom = false;
 
     while (p.isalive())
     {
-        cout << "You are in a dark hallway with paths ahead." << endl;
+        cout << "\nYou are in a dark hallway with paths ahead." << endl;
         cout << "Choose your path:" << endl;
         cout << "1. Go left" << endl;
         cout << "2. Go right" << endl;
         cout << "3. Go forward" << endl;
         cout << "4. Exit the dungeon" << endl;
         cout << "5. Check inventory" << endl;
-        cout << "6. Use item" << endl; // Add option for using items
+        cout << "6. Use item" << endl;
         cout << "Enter your option: ";
 
         int option;
@@ -220,8 +223,7 @@ int main()
             case 1:
             case 2:
             case 3:
-                // If it's the final room and we haven't fought the boss yet
-                if (!enteredBossRoom && rand() % 10 == 0)  // 1 in 10 chance for a boss room
+                if (!enteredBossRoom && rand() % 10 == 0)
                 {
                     cout << "You found the boss room!" << endl;
                     enteredBossRoom = true;
@@ -241,13 +243,18 @@ int main()
                 p.showinventory();
                 break;
 
-            case 6:  // Using an item
+            case 6:
                 p.useItem();
                 break;
 
             default:
                 cout << "Invalid option, try again!" << endl;
         }
+    }
+
+    if (!p.isalive())
+    {
+        cout << "\nGame Over." << endl;
     }
 
     return 0;

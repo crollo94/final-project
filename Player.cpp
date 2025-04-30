@@ -203,7 +203,7 @@ void player::useItem()
 }
 
 // Example trap damage function (just for the sake of showing functionality)
-void player::takeTrapDamage()
+void player::taketrapdamage()
 {
     int trapDamage = rand() % 10 + 10;
     health -= trapDamage;
@@ -255,7 +255,7 @@ bool player::solvePuzzle()
     else
     {
         cout << "Incorrect! You are hurt by the magical trap!" << endl;
-        takeTrapDamage();
+        taketrapdamage();
         return false;
     }
 }
