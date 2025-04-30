@@ -14,7 +14,7 @@ const string loottable[] =
     "magic scroll",
     "dagger",
     "shield",
-    "torch"
+    "torch"  // working on this one
 };
 
 const int lootcount = sizeof(loottable) / sizeof(loottable[0]);
@@ -175,7 +175,7 @@ int main()
     p.createplayer();
     p.stats();
 
-    bool enteredBossRoom = false;  // check if boss room has been reached
+    bool enteredBossRoom = false;  // Flag to check if boss room has been reached
 
     while (p.isalive())
     {
@@ -186,7 +186,7 @@ int main()
         cout << "3. Go forward" << endl;
         cout << "4. Exit the dungeon" << endl;
         cout << "5. Check inventory" << endl;
-        cout << "6. Use item" << endl; // Add option for using items still need to make a function 
+        cout << "6. Use item" << endl; // Add option for using items
         cout << "Enter your option: ";
 
         int option;
@@ -198,7 +198,7 @@ int main()
             case 2:
             case 3:
                 // If it's the final room and we haven't fought the boss yet
-                if (!enteredBossRoom && rand() % 10 == 0)  
+                if (!enteredBossRoom && rand() % 10 == 0)  // 1 in 10 chance for a boss room
                 {
                     cout << "You found the boss room!" << endl;
                     enteredBossRoom = true;
@@ -218,7 +218,7 @@ int main()
                 p.showinventory();
                 break;
 
-            case 6:  // Using an item still need to make it work
+            case 6:  // Using an item
                 p.useItem();
                 break;
 
@@ -229,4 +229,3 @@ int main()
 
     return 0;
 }
-
