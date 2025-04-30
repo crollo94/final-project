@@ -1,15 +1,12 @@
 #ifndef Player_h
-#define player_h
+#define Player_h
 
 #include <string>
 
 using namespace std;
 
-#include<string>
-
-class player
-{
-    private:
+class player {
+private:
     string name;
     string playerclass;
     int health;
@@ -18,7 +15,7 @@ class player
     string inventory[5];
     int itemcount = 0;
 
- public:
+public:
     player();
     void createplayer();
     void stats();
@@ -30,7 +27,10 @@ class player
     void savetofile(const string& filename);
     void additem(const string& item);
     void showinventory();
-
-
+    
+    //  trying  for traps and puzzles
+    void takeTrapDamage();
+    bool solvePuzzle();
 };
+
 #endif

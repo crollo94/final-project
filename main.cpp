@@ -6,73 +6,82 @@
 
 using namespace std;
 
+const string loottable[] =
+{
+    "health potion",
+    "attack potion",
+    "gold coin",
+    "magic scroll",
+    "dagger",
+    "shield",
+    "torch"
+};
 
+const int lootcount = sizeof(loottable) / sizeof(loottable[0]);
+
+// Function for entering a room
 void enterroom(player& p)
 {
-    int outcome = rand() % 3;
+    int outcome = rand() % 5;  // Increased random possibilities to include more room types
 
-    if (outcome ==0)
+    if (outcome == 0)  // Monster room
     {
-        cout << "wild monster appears!" << endl;
+        cout << "Wild monster appears!" << endl;
         int monsterhealth = rand() % 30 + 20;
         int monsterattack = rand() % 10 + 5;
-        while (p.isalive()&& monsterhealth > 0)
+        while (p.isalive() && monsterhealth > 0)
         {
-            cout << "monster health: " << monsterhealth << endl;
-            cout << "choose to attack or heal" << endl;
-            cout << "1. attack" << endl;
-            cout << "2. heal" << endl;
-            cout << "Pick";
+            cout << "Monster health: " << monsterhealth << endl;
+            cout << "Choose to attack or heal" << endl;
+            cout << "1. Attack" << endl;
+            cout << "2. Heal" << endl;
+            cout << "Pick: ";
             int option;
             cin >> option;
 
-            switch(option)
+            switch (option)
             {
                 case 1:
-                monsterhealth -= p.getattack();
-                cout << "you attacked the monster for " << p.getattack() << " Damage" << endl;
-                break;
+                    monsterhealth -= p.getattack();
+                    cout << "You attacked the monster for " << p.getattack() << " damage." << endl;
+                    break;
 
-                case 2: 
-                cout << "enter the amount to heal";
-                int heallimit;
-                cin >> heallimit;
-                p.heal(heallimit);
-                break;
-
+                case 2:
+                    cout << "Enter the amount to heal: ";
+                    int heallimit;
+                    cin >> heallimit;
+                    p.heal(heallimit);
+                    break;
 
                 default:
-                cout <<" wrong pick! try again!" << endl;
-                continue;
-
+                    cout << "Wrong pick! Try again!" << endl;
+                    continue;
             }
 
-            if(monsterhealth > 0)
+            if (monsterhealth > 0)
             {
-                cout << "the moster attacks you" << endl;
+                cout << "The monster attacks you!" << endl;
                 p.dmghit(monsterattack);
             }
+
             p.stats();
         }
 
-        if(p.isalive())
+        if (p.isalive())
         {
-            cout << "you defated the monster" << endl;
-            //loot time?
-            if(rand() % 2 ==0)
-            {
-                p.additem("health potion");
-            }
-
+            cout << "You defeated the monster!" << endl;
+            string randomitem = loottable[rand() % lootcount];
+            cout << "You looted: " << randomitem << endl;
+            p.additem(randomitem);
         }
         else
         {
-            cout << "death!";
+            cout << "You died!" << endl;
         }
     }
-    else if (outcome == 1)
+    else if (outcome == 1)  // Chest room
     {
-        cout << "you find a chest " << endl;
+        cout << "You find a chest!" << endl;
         if (rand() % 2 == 0)
         {
             p.additem("health potion");
@@ -82,9 +91,79 @@ void enterroom(player& p)
             p.additem("attack potion");
         }
     }
+    else if (outcome == 2)  // Empty room
+    {
+        cout << "The room is empty!" << endl;
+    }
+    else if (outcome == 3)  // Trap room
+    {
+        cout << "You triggered a trap!" << endl;
+        p.takeTrapDamage();
+    }
+    else if (outcome == 4)  // Puzzle room
+    {
+        cout << "You find a puzzle!" << endl;
+        bool solved = p.solvePuzzle();
+        if (!solved)
+        {
+            cout << "You couldn't solve the puzzle and are hurt by the magical trap!" << endl;
+        }
+    }
+}
+
+// Function for the boss battle
+void bossBattle(player& p)
+{
+    cout << "A mighty boss appears!" << endl;
+    int bossHealth = 100;
+    int bossAttack = 15;
+
+    while (p.isalive() && bossHealth > 0)
+    {
+        cout << "Boss health: " << bossHealth << endl;
+        cout << "Choose to attack or heal" << endl;
+        cout << "1. Attack" << endl;
+        cout << "2. Heal" << endl;
+        cout << "Pick: ";
+        int option;
+        cin >> option;
+
+        switch (option)
+        {
+            case 1:
+                bossHealth -= p.getattack();
+                cout << "You attacked the boss for " << p.getattack() << " damage." << endl;
+                break;
+
+            case 2:
+                cout << "Enter the amount to heal: ";
+                int heallimit;
+                cin >> heallimit;
+                p.heal(heallimit);
+                break;
+
+            default:
+                cout << "Wrong pick! Try again!" << endl;
+                continue;
+        }
+
+        if (bossHealth > 0)
+        {
+            cout << "The boss attacks you!" << endl;
+            p.dmghit(bossAttack);
+        }
+
+        p.stats();
+    }
+
+    if (p.isalive())
+    {
+        cout << "You defeated the boss!" << endl;
+        p.additem("legendary sword");
+    }
     else
     {
-        cout << " the room is empty " << endl;
+        cout << "You were defeated by the boss!" << endl;
     }
 }
 
@@ -92,39 +171,62 @@ int main()
 {
     srand(time(0));
     player p;
-    cout << "welcome to the dungen!" << endl;
+    cout << "Welcome to the dungeon!" << endl;
     p.createplayer();
     p.stats();
 
+    bool enteredBossRoom = false;  // check if boss room has been reached
+
     while (p.isalive())
     {
-        cout << "you are in a dark hallway with paths ahead" << endl;
-        cout << " choose your own path" << endl;
-        cout << "1. go left" << endl;
-        cout << "2. go right" << endl;
-        cout << "3. go forward" << endl;
-        cout << "4. exit the dungeon" << endl;
-        cout << "enter your option: ";
+        cout << "You are in a dark hallway with paths ahead." << endl;
+        cout << "Choose your path:" << endl;
+        cout << "1. Go left" << endl;
+        cout << "2. Go right" << endl;
+        cout << "3. Go forward" << endl;
+        cout << "4. Exit the dungeon" << endl;
+        cout << "5. Check inventory" << endl;
+        cout << "6. Use item" << endl; // Add option for using items still need to make a function 
+        cout << "Enter your option: ";
 
         int option;
         cin >> option;
 
-        switch(option)
+        switch (option)
         {
             case 1:
             case 2:
             case 3:
-            enterroom(p);
-            break;
-            case 4:
-            cout << "you have exited the dungeon." << endl;
-            return 0;
-            default: 
-            cout << "invaild option, try again" << endl;
+                // If it's the final room and we haven't fought the boss yet
+                if (!enteredBossRoom && rand() % 10 == 0)  
+                {
+                    cout << "You found the boss room!" << endl;
+                    enteredBossRoom = true;
+                    bossBattle(p);
+                }
+                else
+                {
+                    enterroom(p);
+                }
+                break;
 
+            case 4:
+                cout << "You have exited the dungeon." << endl;
+                return 0;
+
+            case 5:
+                p.showinventory();
+                break;
+
+            case 6:  // Using an item still need to make it work
+                p.useItem();
+                break;
+
+            default:
+                cout << "Invalid option, try again!" << endl;
         }
     }
 
     return 0;
-}    
+}
 
