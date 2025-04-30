@@ -259,3 +259,17 @@ bool player::solvePuzzle()
         return false;
     }
 }
+
+int player::getItemCount() const
+{
+    return itemcount;
+}
+
+// Getter for an item in the inventory
+string player::getInventoryItem(int index) const
+{
+    if (index >= 0 && index < itemcount)
+        return inventory[index];
+    else
+        return "";
+}

@@ -2,36 +2,62 @@
 #define PLAYER_H
 
 #include <string>
-
 using namespace std;
 
 class player
 {
-public:
-    player();
-
-    void createplayer();
-    void stats();
-    void dmghit(int dmg);
-    bool isalive();
-    void heal(int amount);
-    void heal();  // Default heal
-    int getattack();
-    void savetofile(const string& filename);
-    void additem(const string& item);
-    void showinventory();
-    void useItem();
-    void takeTrapDamage();
-    bool solvePuzzle();  // Declare solvePuzzle function
-
 private:
     string name;
     string playerclass;
     int health;
     int attack;
     int defense;
-    string inventory[5];  // Inventory with a max of 5 items
-    int itemcount = 0;    // Tracks number of items in the inventory
+    string inventory[5];
+    int itemcount = 0;  // The number of items in the inventory
+
+public:
+    player();  // Constructor to initialize player
+
+    // Player creation
+    void createplayer();
+
+    // Player stats
+    void stats();
+
+    // Damage calculation and taking damage
+    void dmghit(int dmg);
+    bool isalive();
+
+    // Healing functions
+    void heal(int amount);
+    void heal();  // Default heal function
+
+    // Getter for attack
+    int getattack();
+
+    // Save player data to file
+    void savetofile(const string& filename);
+
+    // Add item to inventory
+    void additem(const string& item);
+
+    // Show inventory
+    void showinventory();
+
+    // Use an item
+    void useItem();
+
+    // Take damage from a trap
+    void taketrapdamage();
+
+    // Solve a puzzle
+    bool solvePuzzle();
+
+    // Getter for the number of items in inventory
+    int getItemCount() const;
+
+    // Getter for an item in the inventory
+    string getInventoryItem(int index) const;
 };
 
 #endif // PLAYER_H

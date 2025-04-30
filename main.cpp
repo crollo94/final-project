@@ -109,6 +109,29 @@ void enterroom(player& p)
             cout << "You couldn't solve the puzzle and are hurt by the magical trap!" << endl;
         }
     }
+    else if(outcome == 5)
+    {
+        cout << "you enter a dark room" << endl;
+        bool hastorch = false;  //checking for the torch
+        for (int i = 0; i < p.getItemCount(); ++i)
+        {
+            if (p.getinventoryitem(i)== "torch")
+            {
+                hastorch = true;
+                break;
+            }
+        }
+        if (hastorch)
+        {
+            cout << "you use your touch to light up the way" <<endl;
+            p.additem("gold coin");
+        }
+        else
+        {
+            cout << "its too dark to see, you fall over and get hurt" << endl;
+            p.taketrapdamge(); 
+        }
+    }
 }
 
 // Function for the boss battle
