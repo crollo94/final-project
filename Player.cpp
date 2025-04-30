@@ -1,7 +1,10 @@
 #include "player.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
+
+
 
 player::player()
 {
@@ -85,5 +88,65 @@ void player::heal(int amount)
 {
     health += amount;
     cout << "You healed for " << amount << " HP!" << endl;
+}
+
+void player::heal()
+{
+    heal(5);
+}
+
+int player::getattack()
+{
+    return attack;
+}
+
+void player::savetofile(const string& filename)
+{
+    ofstream file(filename);
+    if(file.is_open())
+    {
+        file << name << endl;
+        file << playerclass << endl;
+        file << health << endl;
+        file << attack << endl;
+        file << defense << endl;
+        file.close();
+        cout << "game saved" << endl;
+    }
+    else 
+    {
+        cout << "failed to open file" << endl;
+    }
+}
+
+
+void player::additem(const string& item)
+{
+    if (itemcount < 5)
+    {
+        inventory[itemcount++] = item;
+        cout << item << " Added to inv" <<endl;
+    }
+    else
+    {
+        cout << " your inv is too full! " << endl;
+    }
+}
+
+
+void player::showinventory()
+{
+    if (itemcount == 0)
+    {
+        cout << "your inv is empty" << endl;
+    }
+    else
+    {
+        cout << "inventory " << endl;
+        for (int i= 0; i <itemcount; ++i)
+        {
+            cout << " " << inventory[i] << endl;
+        }
+    }
 }
 
