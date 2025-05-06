@@ -189,9 +189,30 @@ void player::useItem()
     {
         cout << "You used the torch to light the way!" << endl;
     }
-    else
+    else if (item=="gold coin")
     {
-        cout << "You used a " << item << "!" << endl;  // For any other item
+        cout << "You flip your coin in the air" << endl;
+        cout << "i wonder whats this is for? ";
+    }
+    else if (item == "magic scroll")
+    {
+        heal(10);
+        attack +=2;
+        cout << "The magic scroll fizzles and bursts! +10 hp and +2 attack!" << endl;
+    }
+    else if (item == "dagger")
+    {
+        attack += 5;
+        cout << "the dagger makes you hit harder! equiping the dagger has givin you 5 more attack power!" << endl;
+    }
+    else if (item == "shield")
+    {
+        defense +=5;
+        cout << "equiping the shield has applied +5 defense!" <<endl;
+    }
+    else 
+    {
+        cout << "you used" << item << "it does nothing D:" << endl;
     }
 
     // Remove the item from the inventory

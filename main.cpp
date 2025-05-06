@@ -22,7 +22,7 @@ const int lootcount = sizeof(loottable) / sizeof(loottable[0]);
 // Function for entering a room
 void enterroom(player& p)
 {
-    int outcome = rand() % 6;  // Now supports 6 types of rooms
+    int outcome = rand() % 6;  // up to 6 types of rooms
 
     if (outcome == 0)  // Monster room
     {
