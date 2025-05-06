@@ -223,7 +223,7 @@ void player::useItem()
     --itemcount;
 }
 
-// Example trap damage function (just for the sake of showing functionality)
+// messing with trap rooms 
 void player::taketrapdamage()
 {
     int trapDamage = rand() % 10 + 10;
@@ -231,7 +231,7 @@ void player::taketrapdamage()
     cout << "You triggered a trap and took " << trapDamage << " damage!" << endl;
 }
 
-// Example puzzle solving function (random chance)
+// pizzle solveing 
 bool player::solvePuzzle()
 {
     struct puzzle
